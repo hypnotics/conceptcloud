@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Explore concepts</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- <link rel="shortcut icon" href="/favicon.ico"> -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <link href='style.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
+    <script src="js/jquery.wikiblurb.js" type="text/javascript"></script>
+    <script src="js/jquery.wiki.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="canvas"></div>
+    <div class="container" id="container">
+      <fieldset>
+        <form action="">
+          <input id="concept" type="text" class="ghost-input" placeholder="Enter concept" required>
+        </form>
+      </fieldset>
+      <div id="network">
+        <div id="images"></div>
+        <div id="core"></div>
+        <div id="description"></div>
+      </div>
+      <div id="wikiraw"></div>
+      <div id="related"></div>
+      
+    </div>
+
+  <script>
+    
+    $("#concept").focus();
+    
+    const node = document.getElementById("concept");
+    node.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            // Do more work
+            console.log('... building concept network');
+            var concept = $("#concept").val();
+            $("#concept").hide()
+            buildConceptNetwork(concept);
+        }
+    });
+
+    const buildConceptNetwork = function (concept){
+        console.log('... using concept ' + concept);
+        $("#core").html(concept);
+
+        var relations = function(){
+          console.log('... done fetching relations from wikipedia');
+          $('#images').wikiblurb({page: concept, section: 0, type: "custom", customSelector: "img", callback: images});
+        }
+
+        var sections = function(id) {
+          console.log('... done fetching sections from wikipedia');
+          var section = id+1
+          $('#related').wikiblurb({page: concept, section: section, type: "related", callback: relations});
+        }
+
+        var images = function(){
+          console.log('... done fetching images from wikipedia');
+          $("#images").find('img').each(function () {
+            var image = $(this)
+            var relativePath = image.attr('src')
+            image.attr('src', 'https:' + relativePath)
+            image.attr('srcset', 'https:' + relativePath)
+            if (image.attr('height') < 150){
+              image.hide()
+            }
+          })
+        }
+
+        var blurb = function(){
+          console.log('... done fetching blurb from wikipedia');
+          var wikitext = $('#wikiraw').text().split(".");
+          var s1 = wikitext[0];
+          $('#description').html('<p>' + s1 + '</p>');
+        }
+
+        $('#wikiraw').hide();
+        $('#related').hide();
+        //$('#description').hide();
+        //$('#images').hide();
+        $('#wikiraw').wikiblurb({page: concept, section: 0, type: "blurb", callback: blurb});  
+        wikicall(concept, sections); 
+    }
+
+  </script>
+  <script src="js/jquery.drawstuff.js" type="text/javascript"></script>
+</body>
+</html>
