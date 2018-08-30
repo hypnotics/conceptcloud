@@ -17,6 +17,13 @@
       font-size: 25px;
   }
 
+  #core {
+    text-transform: capitalize;
+    text-decoration: underline;
+    padding: 10px;
+    cursor: pointer;
+  }
+
   #description {
     font-size: 20px;
   }

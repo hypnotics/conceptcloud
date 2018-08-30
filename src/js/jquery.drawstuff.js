@@ -65,7 +65,9 @@
   var createElements = function (svg, nodes, elementRadius) {
     element = svg.selectAll('circle')
                      .data(nodes)
-                   .enter().append('text')
+                   .enter()
+                   .append("svg:a").attr("xlink:href", function(d){return 'javascript:void()';})
+                   .append('text')
                      .text(function (d) { return ' ' + d.text + ' ' })
                      .attr('fill', 'gray')
                      .attr('text-anchor', function (d) {
@@ -79,6 +81,11 @@
                      .attr('y', function (d, i) {
                        return d.y
                      })
+                     .on("click", clickLink);
+  }
+
+  var clickLink = function(){
+    console.log('hurrah!');
   }
 
   var createRoot = function (svg) {
@@ -116,7 +123,7 @@
        // draw();
   })
 
-  $('#core').bind('mouseover', function (e) {
+  $('#core').bind('click', function (e) {
     $('#container').hide()
     console.log('... finding ' + $('#related ul li').length + ' elements')
     draw()

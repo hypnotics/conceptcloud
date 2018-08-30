@@ -1,4 +1,4 @@
-<html>
+<html xmlns:xlink="http://www.w3.org/1999/xlink">
   <head>
     <meta charset="utf-8">
     <title>Explore concepts</title>
@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
+    <!--<script type="text/javascript" src="https://mbostock.github.com/d3/d3.v2.min.js"></script>-->
+    <script type="text/javascript" src="https://d3js.org/d3.v2.min.js"></script>
     <script src="js/jquery.wikiblurb.js" type="text/javascript"></script>
     <script src="js/jquery.wiki.js" type="text/javascript"></script>
   </head>
@@ -78,7 +79,7 @@
 
         var blurb = function(){
           console.log('... done fetching blurb from wikipedia');
-          var wikitext = $('#wikiraw').text().split(".");
+          var wikitext = $('#wikiraw').text().split(". ");
           var s1 = wikitext[0];
           $('#description').html('<p>' + s1 + '</p>');
         }
@@ -87,7 +88,7 @@
         $('#related').hide();
         //$('#description').hide();
         //$('#images').hide();
-        $('#wikiraw').wikiblurb({page: concept, section: 0, type: "blurb", callback: blurb});  
+        $('#wikiraw').wikiblurb({page: concept, section: 0, type: "text", callback: blurb});  
         wikicall(concept, sections); 
     }
 
